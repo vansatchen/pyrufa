@@ -188,7 +188,7 @@ def rebootPhone():
     h = httplib2.Http("/tmp/cache")
     checkOk = False
     while checkOk == False:
-        address = input("Enter ip or dns address: ")
+        address = input("Enter ip or dns address: ").replace(" ", "")
         checkCancel(address)
         if address != "": checkOk = True
 
