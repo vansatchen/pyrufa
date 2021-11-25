@@ -59,7 +59,7 @@ def mainMenu(defaultContext):
                 answer = input("\033[36mReboot another one?[Y/n]: \033[0m")
                 functions.checkCancel(answer)
                 if answer == "" or answer.lower() == "y":
-                    functions.mkConfig()
+                    functions.rebootPhone()
                 else:
                     break
 

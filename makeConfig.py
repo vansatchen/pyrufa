@@ -22,7 +22,12 @@ def makeConfig(name, secret, macAddress):
         file.write('    <P246>%s</P246>\n\n' % vars.phoneTZ)
         file.write('<!--# NTP server -->\n    <P30>%s</P30>\n\n' % vars.ntpServer)
         file.write('<!--# User pass -->\n    <P196>%s</P196>\n\n' % vars.phoneUserPass)
-        file.write('<!--# Disable SIP NOTIFY Authentication -->\n    <P4428>1</P4428>\n')
+        file.write('<!--# Disable SIP NOTIFY Authentication -->\n    <P4428>1</P4428>\n\n')
+        file.write('<!-- Time dd-mm-yyyy  -->\n    <P122>1</P122>\n\n')
+        file.write('<!-- LLDP -->\n    <P1684>0</P1684>\n\n')
+        file.write('<!-- Phonebook -->\n    <P330>1</P330>\n')
+        file.write('    <P331>http://%s/phonebook</P331>\n' % vars.pbxServer)
+        file.write('    <P332>720</P332>\n    <P333>0</P333>\n    <P2914>0</P2914>\n')
         file.write('  </config>\n</gs_provision>')
 
     print("Created as %s" % fileName)
