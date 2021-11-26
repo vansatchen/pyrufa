@@ -31,7 +31,7 @@ def addAccount(defaultContext):
         else:
             checkOk = True
 
-    secret = input("Secret word[\033[33m%s%s\033[0m]: " % (name, vars.defaultData))
+    secret = input("Secret word[\033[33m%s%s\033[0m]: " % (name, vars.defaultData)).strip()
     if secret == "": secret = name + vars.defaultData
     checkCancel(secret)
 
@@ -111,7 +111,7 @@ def editAccount():
         oldSecret = mysqlFunc.getValue(name, "password")
     else:
         oldSecret = newName + vars.defaultData
-    newSecret = input("New secret word[\033[33m%s\033[0m]: " % oldSecret)
+    newSecret = input("New secret word[\033[33m%s\033[0m]: " % oldSecret).strip()
     if newSecret == "":
         newSecret = oldSecret
     else:
