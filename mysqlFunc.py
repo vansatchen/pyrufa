@@ -84,34 +84,40 @@ def editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContact
 
 def showAccounts(option):
     contextLen = 0
+    passwordLen = 0
 
     try:
         db = MySQLdb.connect(user = vars.dbUser, passwd = vars.dbPass, host = vars.dbHost, db = vars.dataBase, charset = vars.dbCharset)
         cursor = db.cursor()
-        cursor.execute("SELECT ps_endpoints.context, ps_auths.username, ps_endpoints.callerid, "
+        cursor.execute("SELECT ps_endpoints.context, ps_auths.username, ps_auths.password, ps_endpoints.callerid, "
                        "ps_contacts.user_agent, ps_contacts.via_addr FROM ps_auths INNER JOIN "
                        "ps_endpoints USING(id) LEFT JOIN ps_contacts ON ps_auths.username = "
                        "ps_contacts.endpoint ORDER BY %s" % option)
         data = cursor.fetchall()
         for row in data:
             if len(row[0]) > contextLen: contextLen = len(row[0])
+            if len(row[2]) > passwordLen: passwordLen = len(row[2])
 
         if contextLen <= 7:
             contextLen = 7
             contextCol = " "
         else: contextCol = " " * (contextLen - 6)
-        boards = "+" + "="*(contextLen+2) + "+" + "="*(vars.lenName + 2) + "+" + "="*42 + "+" + "="*32 + "+" + "="*17 + "+"
+        if passwordLen <= 8:
+            passwordLen = 8
+            passwordCol = " "
+        else: passwordCol = " " * (passwordLen - 7)
+        boards = "+" + "="*(contextLen+2) + "+" + "="*(vars.lenName+2) + "+" + "="*(passwordLen+2) + "+" + "="*42 + "+" + "="*32 + "+" + "="*17 + "+"
         print(boards)
-        print("| Context" + contextCol + "| Name | CallerID" + " "*33 + "| Agent" + " "*26 + "| IP" + " "*14 + "|")
+        print("| Context" + contextCol + "| Name " + "| Password" + passwordCol + "| CallerID" + " "*33 + "| Agent" + " "*26 + "| IP" + " "*14 + "|")
         print(boards)
 
         for row in data:
-            if row[3] is None:
+            if row[4] is None:
                 agent = ip = "Offline"
             else:
-                agent = row[3]
-                ip = row[4]
-            print("|", row[0].ljust(contextLen), "|", row[1].ljust(vars.lenName), "|", row[2][:40].ljust(40), \
+                agent = row[4]
+                ip = row[5]
+            print("|", row[0].ljust(contextLen), "|", row[1].ljust(vars.lenName), "|", row[2].ljust(passwordLen), "|", row[3][:40].ljust(40), \
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
     except:
