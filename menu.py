@@ -19,7 +19,7 @@ def showMenu():
         mysqlFunc.showAccounts("username")
     else:
         functions.checkCancel(choiceShow)
-        print("I don't understand your choice.")
+        print("\033[31mI don't understand your choice.\033[0m")
         choiceShow ='0'
 
 def mainMenu(defaultContext):
