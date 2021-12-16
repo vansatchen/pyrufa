@@ -95,32 +95,6 @@ def showAccounts(option):
                        "ps_contacts.endpoint ORDER BY %s" % option)
         data = cursor.fetchall()
         return data
-        for row in data:
-            if len(row[0]) > contextLen: contextLen = len(row[0])
-            if len(row[2]) > passwordLen: passwordLen = len(row[2])
-
-        if contextLen <= 7:
-            contextLen = 7
-            contextCol = " "
-        else: contextCol = " " * (contextLen - 6)
-        if passwordLen <= 8:
-            passwordLen = 8
-            passwordCol = " "
-        else: passwordCol = " " * (passwordLen - 7)
-        boards = "+" + "="*(contextLen+2) + "+" + "="*(vars.lenName+2) + "+" + "="*(passwordLen+2) + "+" + "="*42 + "+" + "="*32 + "+" + "="*17 + "+"
-        print(boards)
-        print("| Context" + contextCol + "| Name " + "| Password" + passwordCol + "| CallerID" + " "*33 + "| Agent" + " "*26 + "| IP" + " "*14 + "|")
-        print(boards)
-
-        for row in data:
-            if row[4] is None:
-                agent = ip = "Offline"
-            else:
-                agent = row[4]
-                ip = row[5]
-            print("|", row[0].ljust(contextLen), "|", row[1].ljust(vars.lenName), "|", row[2].ljust(passwordLen), "|", row[3][:40].ljust(40), \
-                  "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
-        print(boards)
     except:
         print("\033[31mConnection to MySQL error. Exiting.\033[0m")
         sys.exit(1)
