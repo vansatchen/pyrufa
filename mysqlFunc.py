@@ -94,6 +94,7 @@ def showAccounts(option):
                        "ps_endpoints USING(id) LEFT JOIN ps_contacts ON ps_auths.username = "
                        "ps_contacts.endpoint ORDER BY %s" % option)
         data = cursor.fetchall()
+        return data
         for row in data:
             if len(row[0]) > contextLen: contextLen = len(row[0])
             if len(row[2]) > passwordLen: passwordLen = len(row[2])
