@@ -83,9 +83,6 @@ def editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContact
         if db: db.close()
 
 def showAccounts(option):
-    contextLen = 0
-    passwordLen = 0
-
     try:
         db = MySQLdb.connect(user = vars.dbUser, passwd = vars.dbPass, host = vars.dbHost, db = vars.dataBase, charset = vars.dbCharset)
         cursor = db.cursor()
