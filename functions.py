@@ -148,6 +148,9 @@ def editAccount():
     if updateAccount == True:
         mysqlFunc.editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContacts)
 
+def showAccounts(option):
+    mysqlFunc.showAccounts(option)
+
 def mkConfig():
     checkOk = False
     while checkOk == False:
