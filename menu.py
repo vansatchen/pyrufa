@@ -10,13 +10,13 @@ def showMenu():
     choiceShow = input("Please enter an action[1]: ")
 
     if choiceShow =="1":
-        mysqlFunc.showAccounts("username")
+        functions.showAccounts("username")
     elif choiceShow =="2":
-        mysqlFunc.showAccounts("callerid")
+        functions.showAccounts("callerid")
     elif choiceShow =="3":
-        mysqlFunc.showAccounts("via_addr DESC")
+        functions.showAccounts("via_addr DESC")
     elif choiceShow =="":
-        mysqlFunc.showAccounts("username")
+        functions.showAccounts("username")
     else:
         functions.checkCancel(choiceShow)
         print("\033[31mI don't understand your choice.\033[0m")
