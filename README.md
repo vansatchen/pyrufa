@@ -17,6 +17,8 @@ Extra-options:
 * making configs for provisioning grandstream gxp-1xxx, gxp-2xxx. At this time only for single account.
 * reboot remote phones via ip-address.
 
+<img src="https://github.com/vansatchen/pyrufa/blob/main/Screenshot_pyrufa.png" width="750"/>
+
 ## Dependencies
 * python3.4+
 * python3-mysqldb
