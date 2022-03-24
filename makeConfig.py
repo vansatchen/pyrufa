@@ -1,6 +1,6 @@
 import vars
 
-def makeConfig(name, secret, macAddress):
+def makeGrandstreamConfig(name, secret, macAddress):
     fileName = "cfg" + macAddress + ".xml"
 
     with open(fileName, "w") as file:

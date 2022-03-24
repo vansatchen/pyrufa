@@ -236,7 +236,7 @@ def mkConfig():
 
 #    secret = mysqlFunc.getValue(name, "password")
     secret = db.getValue(name, "password")
-    makeConfig.makeConfig(name, secret, macAddress)
+    makeConfig.makeGrandstreamConfig(name, secret, macAddress)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")
