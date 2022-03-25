@@ -26,8 +26,26 @@ def makeGrandstreamConfig(name, secret, macAddress):
         file.write('<!-- Time dd-mm-yyyy  -->\n    <P122>1</P122>\n\n')
         file.write('<!-- LLDP -->\n    <P1684>0</P1684>\n\n')
         file.write('<!-- Phonebook -->\n    <P330>1</P330>\n')
-        file.write('    <P331>http://%s/phonebook</P331>\n' % vars.pbxServer)
+        file.write('    <P331>http://pbx-unc.bngf.ru/phonebook</P331>\n')
         file.write('    <P332>720</P332>\n    <P333>0</P333>\n    <P2914>0</P2914>\n')
         file.write('  </config>\n</gs_provision>')
+
+    print("Created as %s" % fileName)
+
+
+def makePanasonicConfig(name, secret, macAddress):
+    fileName = macAddress
+
+    with open(fileName, "w") as file:
+        file.write('# Panasonic SIP Phone Standard Format File # DO NOT CHANGE THIS LINE!\n\n')
+
+    with open(fileName, "a") as file:
+        file.write('# System\nTIME_ZONE="300"\nDEFAULT_LANGUAGE="ru"\nHTTPD_PORTOPEN_AUTO="Y"\nADMIN_PASS="%s"\n\n' % vars.phoneAdminPass)
+        file.write('## Firmware Update Settings\nFIRM_UPGRADE_ENABLE="Y"\n\n')
+        file.write('# VoIP\nPHONE_NUMBER_1="{0}"\nSIP_AUTHID_1="{0}"\nSIP_PASS_1="{1}"\n'.format(name, secret))
+        file.write('SIP_RGSTR_ADDR_1="{0}"\nSIP_PRSNC_ADDR_1="{0}"\nSIP_OUTPROXY_ADDR_1="{0}"\n'.format(vars.pbxServer))
+        file.write('SIP_SVCDOMAIN_1="example.com"\nREG_EXPIRE_TIME_1="600"\n\n')
+        file.write('# Codecs\nCODEC_PRIORITY3_1="1"\nCODEC_PRIORITY1_1="2"\nCODEC_PRIORITY4_1="3"\n\n')
+        file.write('## Provisioning Settings\nOPTION66_ENABLE="Y"\nOPTION66_REBOOT="Y"\nPROVISION_ENABLE="Y"\nCFG_CYCLIC="Y"\nCFG_CYCLIC_INTVL="3600"\n')
 
     print("Created as %s" % fileName)

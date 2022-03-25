@@ -9,18 +9,33 @@ def showMenu():
 
     choiceShow = input("Please enter an action[1]: ")
 
-    if choiceShow =="1":
+    if choiceShow == "1":
         functions.showAccounts("username")
-    elif choiceShow =="2":
+    elif choiceShow == "2":
         functions.showAccounts("callerid")
-    elif choiceShow =="3":
+    elif choiceShow == "3":
         functions.showAccounts("via_addr DESC")
-    elif choiceShow =="":
+    elif choiceShow == "":
         functions.showAccounts("username")
     else:
         functions.checkCancel(choiceShow)
         print("\033[31mI don't understand your choice.\033[0m")
-        choiceShow ='0'
+        choiceShow = '0'
+
+def makeConfigMenu():
+    print("1) For Grandstream")
+    print("2) For Panasonic")
+
+    choiceMenu = input("Please enter vendor[1]: ")
+
+    if choiceMenu == "1" or choiceMenu == "":
+        functions.mkConfig("1")
+    elif choiceMenu == "2":
+        functions.mkConfig("2")
+    else:
+        functions.checkCancel(choiceMenu)
+        print("\033[31mI don't understand your choice.\033[0m")
+        choiceMenu = '0'
 
 def mainMenu(defaultContext):
     while True:
@@ -42,13 +57,15 @@ def mainMenu(defaultContext):
         elif choice =="4":
             showMenu()
         elif choice =="5":
-            functions.mkConfig()
+#            functions.mkConfig()
+            makeConfigMenu()
 
             while True:
                 answer = input("\033[36mMake another one?[Y/n]: \033[0m")
                 functions.checkCancel(answer)
                 if answer == "" or answer.lower() == "y":
-                    functions.mkConfig()
+#                    functions.mkConfig()
+                    makeConfigMenu()
                 else:
                     break
 

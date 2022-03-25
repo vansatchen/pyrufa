@@ -30,7 +30,7 @@ vlan = "0" # Number of vlan.
 phoneLang = "ru" # Display language on phone.
 phoneTZ = "MTZ-5MDT-5,M4.1.0,M11.1.0"
 phoneUserPass = "userpass" # User password for access to phone WUI.
-ntpServer = "pool.ntp.org" 
+ntpServer = "pool.ntp.org"
 
 #--- Other settings ---#
 adminPass = "admin1" # Admin password for reboot phone.

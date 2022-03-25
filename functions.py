@@ -199,7 +199,7 @@ def showAccounts(option):
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
 
-def mkConfig():
+def mkConfig(vendorNum):
     checkOk = False
     while checkOk == False:
         name = input("Name/number: ")
@@ -234,9 +234,11 @@ def mkConfig():
         else:
             checkOk = True
 
-#    secret = mysqlFunc.getValue(name, "password")
     secret = db.getValue(name, "password")
-    makeConfig.makeGrandstreamConfig(name, secret, macAddress)
+    if vendorNum == "1":
+        makeConfig.makeGrandstreamConfig(name, secret, macAddress)
+    else:
+        makeConfig.makePanasonicConfig(name, secret, macAddress)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")
