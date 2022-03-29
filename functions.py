@@ -254,8 +254,13 @@ def rebootPhone():
         checkCancel(password)
         if password == "": password = vars.adminPass
 
-        request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
-        resp_headers, content = h.request("http://" + address + request, "GET")
+        try:
+            request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
+            resp_headers, content = h.request("http://" + address + request, "GET")
+        except:
+            print("No route to host")
+            return
+
         content = content.decode()
         if 'Unauthorized' in content:
             print("\033[31mInvalid password: Unauthorized\033[0m")

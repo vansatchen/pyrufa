@@ -40,12 +40,15 @@ def makePanasonicConfig(name, secret, macAddress):
         file.write('# Panasonic SIP Phone Standard Format File # DO NOT CHANGE THIS LINE!\n\n')
 
     with open(fileName, "a") as file:
-        file.write('# System\nTIME_ZONE="300"\nDEFAULT_LANGUAGE="ru"\nHTTPD_PORTOPEN_AUTO="Y"\nADMIN_PASS="%s"\n\n' % vars.phoneAdminPass)
+
+        file.write('# System\nTIME_ZONE="300"\nDEFAULT_LANGUAGE="{0}"\nHTTPD_PORTOPEN_AUTO="Y"\nADMIN_PASS="{1}"\n'.format(vars.phoneLang))
+        file.write('ADMIN_PASS="{0}"\nNTP_ADDR="{1}"\nDISPLAY_TIME_PATTERN="2"\n\n'.format(vars.phoneAdminPass, vars.ntpServer))
         file.write('## Firmware Update Settings\nFIRM_UPGRADE_ENABLE="Y"\n\n')
         file.write('# VoIP\nPHONE_NUMBER_1="{0}"\nSIP_AUTHID_1="{0}"\nSIP_PASS_1="{1}"\n'.format(name, secret))
         file.write('SIP_RGSTR_ADDR_1="{0}"\nSIP_PRSNC_ADDR_1="{0}"\nSIP_OUTPROXY_ADDR_1="{0}"\n'.format(vars.pbxServer))
         file.write('SIP_SVCDOMAIN_1="example.com"\nREG_EXPIRE_TIME_1="600"\n\n')
         file.write('# Codecs\nCODEC_PRIORITY3_1="1"\nCODEC_PRIORITY1_1="2"\nCODEC_PRIORITY4_1="3"\n\n')
-        file.write('## Provisioning Settings\nOPTION66_ENABLE="Y"\nOPTION66_REBOOT="Y"\nPROVISION_ENABLE="Y"\nCFG_CYCLIC="Y"\nCFG_CYCLIC_INTVL="3600"\n')
+        file.write('## Provisioning Settings\nOPTION66_ENABLE="Y"\nOPTION66_REBOOT="Y"\nPROVISION_ENABLE="Y"\nCFG_CYCLIC="Y"\n')
+        file.write('CFG_CYCLIC_INTVL="3600"\nVLAN_ENABLE="{0}"\nVLAN_ID_IP_PHONE="{1}"\n'.format(vars.vlanEnabled, vars.vlan))
 
     print("Created as %s" % fileName)
