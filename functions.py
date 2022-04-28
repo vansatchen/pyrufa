@@ -25,7 +25,6 @@ def addAccount(defaultContext):
             print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
             continue
 
-#        checkName = mysqlFunc.checkNameNotExists(name)
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if not checkName:
@@ -43,7 +42,6 @@ def addAccount(defaultContext):
         checkCancel(callerIDName)
         callerID = callerIDName + " <" + name + ">"
 
-#    mysqlFunc.addAccount(context, name, secret, callerID)
     db.addAccount(context, name, secret, callerID)
 
 def delAccount():
@@ -57,7 +55,6 @@ def delAccount():
             print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
             continue
 
-#        checkName = mysqlFunc.checkNameNotExists(name)
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if checkName:
@@ -65,7 +62,6 @@ def delAccount():
         else:
             checkOk = True
 
-#    mysqlFunc.delAccount(name)
     db.delAccount(name)
 
 def editAccount():
@@ -80,7 +76,6 @@ def editAccount():
             print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
             continue
 
-#        checkName = mysqlFunc.checkNameNotExists(name)
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if checkName:
@@ -88,7 +83,6 @@ def editAccount():
         else:
             checkOk = True
 
-#    oldContext = mysqlFunc.getValue(name, "context")
     oldContext = db.getValue(name, "context")
     newContext = input("New group(context)[\033[33m%s\033[0m]: " % oldContext)
     if newContext == "":
@@ -109,7 +103,6 @@ def editAccount():
             print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
             continue
 
-#        checkName = mysqlFunc.checkNameNotExists(newName)
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if not checkName:
@@ -119,7 +112,6 @@ def editAccount():
             updateAccount = True
 
     if name == newName:
-#        oldSecret = mysqlFunc.getValue(name, "password")
         oldSecret = db.getValue(name, "password")
     else:
         oldSecret = newName + vars.defaultData
@@ -130,7 +122,6 @@ def editAccount():
         updateAccount = True
     checkCancel(newSecret)
 
-#    oldCallerID = mysqlFunc.getValue(name, "callerid")
     oldCallerID = db.getValue(name, "callerid")
     if name != newName:
         oldCallerID = oldCallerID.replace(name, newName)
@@ -144,7 +135,6 @@ def editAccount():
 
     checkOk = False
     while checkOk == False:
-#        oldMaxContacts = mysqlFunc.getValue(name, "max_contacts")
         oldMaxContacts = db.getValue(name, "max_contacts")
         newMaxContacts = input("New max_contacts[\033[33m%s\033[0m]: " % oldMaxContacts)
         if newMaxContacts == "":
@@ -160,12 +150,10 @@ def editAccount():
         checkCancel(newMaxContacts)
 
     if updateAccount == True:
-#        mysqlFunc.editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContacts)
         db = mysqlFunc.Database()
         db.editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContacts)
 
 def showAccounts(option):
-#    data = mysqlFunc.showAccounts(option)
     db = mysqlFunc.Database()
     data = db.showAccounts(option)
     contextLen = 0
@@ -210,7 +198,6 @@ def mkConfig(vendorNum):
             print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
             continue
 
-#        checkName = mysqlFunc.checkNameNotExists(name)
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if checkName:
@@ -277,3 +264,12 @@ def rebootPhone():
 
         print(content)
         checkOk = True
+
+def addToBlacklist():
+    return
+
+def delFromBlacklist():
+    return
+
+def showBlacklist():
+    return
