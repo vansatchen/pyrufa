@@ -61,6 +61,23 @@ class Database:
                             "ps_contacts.endpoint ORDER BY %s" % option)
         return self.cursor.fetchall()
 
+    def showBlacklist(self):
+        self.cursor.execute("SELECT name FROM blacklist")
+        return self.cursor.fetchall()
+
+    def addToBlacklist(self, name):
+        self.cursor.execute("INSERT INTO blacklist(name) VALUES(%s)", (name,))
+        self.db.commit()
+
+    def delFromBlacklist(self, name):
+        self.cursor.execute("DELETE FROM blacklist WHERE name = %s", (name,))
+        self.db.commit()
+
+    def existInBlacklist(self, number):
+        self.cursor.execute("SELECT name FROM blacklist WHERE name = %s", (number,))
+        data = self.cursor.fetchall()
+        return True if data else False
+
     def __del__(self):
         self.cursor.close()
         self.db.close()

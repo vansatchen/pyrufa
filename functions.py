@@ -187,7 +187,7 @@ def showAccounts(option):
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
 
-def mkConfig(vendorNum):
+def mkConfig():
     checkOk = False
     while checkOk == False:
         name = input("Name/number: ")
@@ -222,10 +222,7 @@ def mkConfig(vendorNum):
             checkOk = True
 
     secret = db.getValue(name, "password")
-    if vendorNum == "1":
-        makeConfig.makeGrandstreamConfig(name, secret, macAddress)
-    else:
-        makeConfig.makePanasonicConfig(name, secret, macAddress)
+    makeConfig.makeConfig(name, secret, macAddress)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")
@@ -241,13 +238,8 @@ def rebootPhone():
         checkCancel(password)
         if password == "": password = vars.adminPass
 
-        try:
-            request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
-            resp_headers, content = h.request("http://" + address + request, "GET")
-        except:
-            print("No route to host")
-            return
-
+        request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
+        resp_headers, content = h.request("http://" + address + request, "GET")
         content = content.decode()
         if 'Unauthorized' in content:
             print("\033[31mInvalid password: Unauthorized\033[0m")
@@ -266,10 +258,55 @@ def rebootPhone():
         checkOk = True
 
 def addToBlacklist():
-    return
+    db = mysqlFunc.Database()
+    checkNum = False
+    while checkNum == False:
+        number = input("Number to add[quit]: ")
+        if number == "": number = "quit"
+        if not number.isdecimal():
+            checkCancel(number)
+            print("\033[31mNumber must be numeric!\033[0m")
+        else:
+            if db.existInBlacklist(number):
+                print("\033[31mNumber exists!\033[0m")
+            else: checkNum = True
+
+    db.addToBlacklist(number)
 
 def delFromBlacklist():
-    return
+    db = mysqlFunc.Database()
+    checkNum = False
+    while checkNum == False:
+        number = input("Number to delete[quit]: ")
+        if number == "": number = "quit"
+        if not number.isdecimal():
+            checkCancel(number)
+            print("\033[31mNumber must be numeric!\033[0m")
+        else:
+            if not db.existInBlacklist(number):
+                print("\033[31mNumber is not exists!\033[0m")
+            else: checkNum = True
+
+    db.delFromBlacklist(number)
 
 def showBlacklist():
-    return
+    db = mysqlFunc.Database()
+    data = db.showBlacklist()
+
+    numberLen = 0
+
+    if data:
+        for row in data:
+            if len(row[0]) > numberLen: numberLen = len(row[0])
+        if numberLen < 8: numberLen = 8
+
+        boards = "+" + "="*(numberLen+2) + "+"
+        print(boards)
+        print("|" + " number " + " "*(numberLen-6) + "|")
+        print(boards)
+
+        for row in data:
+            print("| " + row[0] + " "*(numberLen-len(row[0])) + " |")
+
+        print(boards)
+    else: print("Empty")
