@@ -187,7 +187,7 @@ def showAccounts(option):
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
 
-def mkConfig():
+def mkConfig(vendorNum):
     checkOk = False
     while checkOk == False:
         name = input("Name/number: ")
@@ -222,7 +222,10 @@ def mkConfig():
             checkOk = True
 
     secret = db.getValue(name, "password")
-    makeConfig.makeConfig(name, secret, macAddress)
+    if vendorNum == "1":
+        makeConfig.makeGrandstreamConfig(name, secret, macAddress)
+    else:
+        makeConfig.makePanasonicConfig(name, secret, macAddress)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")
@@ -238,8 +241,13 @@ def rebootPhone():
         checkCancel(password)
         if password == "": password = vars.adminPass
 
-        request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
-        resp_headers, content = h.request("http://" + address + request, "GET")
+        try:
+            request = "/cgi-bin/api-sys_operation?passcode=" + password + "&request=REBOOT"
+            resp_headers, content = h.request("http://" + address + request, "GET")
+        except:
+            print("No route to host")
+            return
+
         content = content.decode()
         if 'Unauthorized' in content:
             print("\033[31mInvalid password: Unauthorized\033[0m")

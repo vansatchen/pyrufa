@@ -41,7 +41,7 @@ def makePanasonicConfig(name, secret, macAddress):
 
     with open(fileName, "a") as file:
 
-        file.write('# System\nTIME_ZONE="300"\nDEFAULT_LANGUAGE="{0}"\nHTTPD_PORTOPEN_AUTO="Y"\nADMIN_PASS="{1}"\n'.format(vars.phoneLang))
+        file.write('# System\nTIME_ZONE="300"\nDEFAULT_LANGUAGE="{0}"\nHTTPD_PORTOPEN_AUTO="Y"\n'.format(vars.phoneLang))
         file.write('ADMIN_PASS="{0}"\nNTP_ADDR="{1}"\nDISPLAY_TIME_PATTERN="2"\n\n'.format(vars.phoneAdminPass, vars.ntpServer))
         file.write('## Firmware Update Settings\nFIRM_UPGRADE_ENABLE="Y"\n\n')
         file.write('# VoIP\nPHONE_NUMBER_1="{0}"\nSIP_AUTHID_1="{0}"\nSIP_PASS_1="{1}"\n'.format(name, secret))
