@@ -6,6 +6,7 @@ def showMenu():
     print("\n1) Show by name")
     print("2) Show by callerID")
     print("3) Show by status")
+    print("0) back")
 
     choiceShow = input("Please enter an action[1]: ")
 
@@ -15,6 +16,8 @@ def showMenu():
         functions.showAccounts("callerid")
     elif choiceShow == "3":
         functions.showAccounts("via_addr DESC")
+    elif choiceShow == "0":
+        return
     elif choiceShow == "":
         functions.showAccounts("username")
     else:
