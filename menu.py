@@ -45,6 +45,7 @@ def blacklistMenu():
         print("\n1) Add")
         print("2) Delete")
         print("3) Show")
+        print("0) back")
 
         choice = input("Please enter an action[quit]: ")
 
@@ -54,6 +55,8 @@ def blacklistMenu():
             functions.delFromBlacklist()
         elif choice =="3":
             functions.showBlacklist()
+        elif choiceBl == "0":
+            return
         elif choice =="":
             print("\033[36mNo action. Exiting\033[0m\n")
             sys.exit(0)
