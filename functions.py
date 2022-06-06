@@ -221,6 +221,8 @@ def showAccount():
             if account[i] == None:
                 optionData = ""
             else: optionData = account[i]
+            if optionsName[i] == "IP address" and account[i] == None:
+                optionData = "Offline"
             print("| " + optionsName[i].ljust(17) + " | " + optionData.ljust(optionLen+2) + " |")
             i += 1
 
