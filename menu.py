@@ -6,6 +6,7 @@ def showMenu():
     print("\n1) Show by name")
     print("2) Show by callerID")
     print("3) Show by status")
+    print("4) Show account")
     print("0) back")
 
     choiceShow = input("Please enter an action[1]: ")
@@ -16,6 +17,8 @@ def showMenu():
         functions.showAccounts("callerid")
     elif choiceShow == "3":
         functions.showAccounts("via_addr DESC")
+    elif choiceShow == "4":
+        functions.showAccount()
     elif choiceShow == "0":
         return
     elif choiceShow == "":
@@ -47,13 +50,13 @@ def blacklistMenu():
         print("3) Show")
         print("0) back")
 
-        choice = input("Please enter an action[quit]: ")
+        choiceBl = input("Please enter an action[quit]: ")
 
-        if choice =="1":
+        if choiceBl =="1":
             functions.addToBlacklist()
-        elif choice =="2":
+        elif choiceBl =="2":
             functions.delFromBlacklist()
-        elif choice =="3":
+        elif choiceBl =="3":
             functions.showBlacklist()
         elif choiceBl == "0":
             return

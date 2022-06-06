@@ -187,6 +187,47 @@ def showAccounts(option):
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
 
+def showAccount():
+    checkOk = False
+    while checkOk == False:
+        name = input("Name/number: ")
+        if name == "":
+            continue
+        elif len(name) != vars.lenName or not name.isdigit():
+            checkCancel(name)
+            print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
+            continue
+        else:
+            db = mysqlFunc.Database()
+            checkName = db.checkNameNotExists(name)
+            if checkName:
+                print("\033[31mName/number %s not exists, please enter another\033[0m" % name)
+            else: checkOk = True
+
+    db = mysqlFunc.Database()
+    data = db.showAccount(name)
+    optionLen = vars.lenName
+    optionsName = ("Number", "Transport", "Context", "Codecs", "DTMF", "Media encryption", "CallerID", "Call group", "Pickup group", "Password", "User agent", "IP address")
+
+    for account in data:
+        for row in account:
+            if row == None: continue
+            if len(row) > optionLen: optionLen = len(row)
+
+        boards = "+" + "="*19 + "+" + "="*(optionLen+4) + "+"
+        print(boards)
+        i = 0
+        while i < len(optionsName):
+            if account[i] == None:
+                optionData = ""
+            else: optionData = account[i]
+            print("| " + optionsName[i].ljust(17) + " | " + optionData.ljust(optionLen+2) + " |")
+            i += 1
+
+        print(boards)
+
+
+
 def mkConfig(vendorNum):
     checkOk = False
     while checkOk == False:
