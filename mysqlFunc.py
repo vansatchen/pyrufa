@@ -64,7 +64,7 @@ class Database:
     def showAccount(self, account):
         self.cursor.execute("SELECT ps_endpoints.id, ps_endpoints.transport, ps_endpoints.context, ps_endpoints.allow, "
                             "ps_endpoints.dtmf_mode, ps_endpoints.media_encryption, ps_endpoints.callerid, "
-                            "ps_endpoints.call_group, ps_endpoints.pickup_group, ps_auths.password, "
+                            "ps_endpoints.named_call_group, ps_endpoints.named_pickup_group, ps_auths.password, "
                             "ps_contacts.user_agent, ps_contacts.via_addr FROM ps_auths INNER JOIN "
                             "ps_endpoints USING(id) LEFT JOIN ps_contacts ON ps_auths.username = "
                             "ps_contacts.endpoint where ps_auths.username = '%s'" % account);
