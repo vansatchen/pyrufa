@@ -158,6 +158,7 @@ def showAccounts(option):
     data = db.showAccounts(option)
     contextLen = 0
     passwordLen = 0
+    countOnline, countOffline = 0, 0
 
     if data:
         for row in data:
@@ -180,12 +181,15 @@ def showAccounts(option):
         for row in data:
             if row[4] is None:
                 agent = ip = "Offline"
+                countOffline += 1
             else:
                 agent = row[4]
                 ip = row[5]
+                countOnline += 1
             print("|", row[0].ljust(contextLen), "|", row[1].ljust(vars.lenName), "|", row[2].ljust(passwordLen), "|", row[3][:40].ljust(40), \
                   "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
         print(boards)
+        print("Online : " + str(countOnline) + "\nOffline: " + str(countOffline))
 
 def showAccount():
     checkOk = False
