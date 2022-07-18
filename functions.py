@@ -149,9 +149,17 @@ def editAccount():
             updateAccount = True
         checkCancel(newMaxContacts)
 
+    oldPickupGroup = db.getValue(name, "named_pickup_group")
+    newPickupGroup = input("New Pickup group[\033[33m%s\033[0m]: " % oldPickupGroup).strip()
+    if newPickupGroup == "":
+        newPickupGroup = oldPickupGroup
+    else:
+        updateAccount = True
+    checkCancel(newPickupGroup)
+
     if updateAccount == True:
         db = mysqlFunc.Database()
-        db.editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContacts)
+        db.editAccount(name, newContext, newName, newSecret, newCallerID, newMaxContacts, newPickupGroup)
 
 def showAccounts(option):
     db = mysqlFunc.Database()

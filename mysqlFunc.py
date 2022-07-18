@@ -39,18 +39,21 @@ class Database:
         print("\033[36mDone.\033[0m")
 
     def getValue(self, value, option):
-        if option == "context" or option == "callerid": table = "ps_endpoints"
+        if option == "context" or option == "callerid" or option == "named_pickup_group": table = "ps_endpoints"
         elif option == "max_contacts": table = "ps_aors"
         else: table = "ps_auths"
         self.cursor.execute("SELECT %s FROM %s WHERE id = %s" % (option, table, value))
         data = self.cursor.fetchall()
         return data[0][0]
 
-    def editAccount(self, name, newContext, newName, newSecret, newCallerID, newMaxContacts):
+    def editAccount(self, name, newContext, newName, newSecret, newCallerID, newMaxContacts, newPickupGroup):
         self.cursor.execute("UPDATE ps_aors SET id = %s, max_contacts = %s WHERE id = %s", (newName, newMaxContacts, name))
-        self.cursor.execute("UPDATE ps_auths SET id = %s, username = %s, password = %s WHERE id = %s", (newName, newName, newSecret, name))
-        self.cursor.execute("UPDATE ps_endpoints SET context = %s, mailboxes = %s'@'%s, id = %s, aors = %s, auth = %s, callerid = %s \
-                             WHERE id = %s", (newContext, newName, newContext, newName, newName, newName, newCallerID, name))
+        self.cursor.execute("UPDATE ps_auths SET id = %s, username = %s, password = %s WHERE id = %s",
+                           (newName, newName, newSecret, name))
+        self.cursor.execute("UPDATE ps_endpoints SET context = %s, mailboxes = %s'@'%s, id = %s, \
+                             aors = %s, auth = %s, callerid = %s, named_call_group = %s, named_pickup_group = %s WHERE id = %s",
+                           (newContext, newName, newContext, newName, newName, newName, newCallerID,
+                            newPickupGroup, newPickupGroup, name))
         self.db.commit()
         print("\033[36mDone.\033[0m")
 
