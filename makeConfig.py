@@ -28,6 +28,8 @@ def makeGrandstreamConfig(name, secret, macAddress):
         file.write('<!-- Phonebook -->\n    <P330>1</P330>\n')
         file.write('    <P331>http://pbx-unc.bngf.ru/phonebook</P331>\n')
         file.write('    <P332>720</P332>\n    <P333>0</P333>\n    <P2914>0</P2914>\n')
+        file.write('<!-- Codecs g722,PCMA,PCMu,g729-->\n')
+        file.write('    <P57>9</P57>\n    <P58>8</P58>\n    <P59>0</P59>\n    <P60>18</P60>\n')
         file.write('  </config>\n</gs_provision>')
 
     print("Created as %s" % fileName)
