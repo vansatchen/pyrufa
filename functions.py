@@ -263,7 +263,7 @@ def mkConfig(vendorNum):
 
     checkOk = False
     while checkOk == False:
-        macAddress = input("Mac-address or \"\033[33mquit\033[0m\" to quit: ").lower().replace(":", "").replace(" ", "")
+        macAddress = input("Mac-address or \"\033[33mquit\033[0m\" to quit: ").lower().replace(":", "").replace(" ", "").replace("-", "")
         checkCancel(macAddress)
         if len(macAddress) != 12:
             print("\033[31mMac-address must have 12 characters only(without colons).\033[0m")
