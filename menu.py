@@ -60,7 +60,7 @@ def blacklistMenu():
             functions.showBlacklist()
         elif choiceBl == "0":
             return
-        elif choiceBL =="":
+        elif choiceBl =="":
             print("\033[36mNo action. Exiting\033[0m\n")
             sys.exit(0)
         else:
