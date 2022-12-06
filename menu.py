@@ -7,6 +7,7 @@ def showMenu():
     print("2) Show by callerID")
     print("3) Show by status")
     print("4) Show account")
+    print("5) Show context\'s users")
     print("0) back")
 
     choiceShow = input("Please enter an action[1]: ")
@@ -19,6 +20,8 @@ def showMenu():
         functions.showAccounts("via_addr DESC")
     elif choiceShow == "4":
         functions.showAccount()
+    elif choiceShow == "5":
+        functions.showContexts()
     elif choiceShow == "0":
         return
     elif choiceShow == "":

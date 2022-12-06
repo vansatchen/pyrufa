@@ -70,7 +70,14 @@ class Database:
                             "ps_endpoints.named_call_group, ps_endpoints.named_pickup_group, ps_auths.password, "
                             "ps_contacts.user_agent, ps_contacts.via_addr FROM ps_auths INNER JOIN "
                             "ps_endpoints USING(id) LEFT JOIN ps_contacts ON ps_auths.username = "
-                            "ps_contacts.endpoint where ps_auths.username = '%s'" % account);
+                            "ps_contacts.endpoint where ps_auths.username = '%s' ORDER BY username" % account);
+        return self.cursor.fetchall()
+
+    def showContext(self, context):
+        self.cursor.execute("SELECT ps_endpoints.context, ps_auths.username, ps_auths.password, ps_endpoints.callerid, "
+                             "ps_contacts.user_agent, ps_contacts.via_addr FROM ps_auths INNER JOIN "
+                             "ps_endpoints USING(id) LEFT JOIN ps_contacts ON ps_auths.username = "
+                             "ps_contacts.endpoint WHERE ps_endpoints.context = '%s' ORDER BY username" % context)
         return self.cursor.fetchall()
 
     def showBlacklist(self):

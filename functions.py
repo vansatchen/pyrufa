@@ -240,6 +240,68 @@ def showAccount():
 
         print(boards)
 
+def showContexts():
+    print("")
+    db = mysqlFunc.Database()
+    data = db.showAccounts("callerid")
+    contextsList = []
+
+    if data:
+        for row in data:
+            contextsList.append(row[0])
+    contextsSet = sorted(list(set(contextsList)))
+    contextsSetIndex = 0
+
+    for context in contextsSet:
+        print(str(contextsSetIndex + 1) + ") " + context)
+        contextsSetIndex += 1
+
+    checkOk = False
+    while checkOk == False:
+        contextNum = input("Context number: ")
+        if contextNum.isdigit():
+            if int(contextNum) > len(contextsSet):
+                print("\033[31mContext number is out of range\033[0m")
+            else: checkOk = True
+        else:
+            print("\033[31mContext number is not a number\033[0m")
+        checkCancel(contextNum)
+
+    data = db.showContext(contextsSet[int(contextNum) - 1])
+    contextLen = 0
+    passwordLen = 0
+    countOnline, countOffline = 0, 0
+
+    if data:
+        for row in data:
+            if len(row[0]) > contextLen: contextLen = len(row[0])
+            if len(row[2]) > passwordLen: passwordLen = len(row[2])
+
+        if contextLen <= 7:
+            contextLen = 7
+            contextCol = " "
+        else: contextCol = " " * (contextLen - 6)
+        if passwordLen <= 8:
+            passwordLen = 8
+            passwordCol = " "
+        else: passwordCol = " " * (passwordLen - 7)
+        boards = "+" + "="*(contextLen+2) + "+" + "="*(vars.lenName+2) + "+" + "="*(passwordLen+2) + "+" + "="*42 + "+" + "="*32 + "+" + "="*17 + "+"
+        print(boards)
+        print("| Context" + contextCol + "| Name " + "| Password" + passwordCol + "| CallerID" + " "*33 + "| Agent" + " "*26 + "| IP" + " "*14 + "|")
+        print(boards)
+
+        for row in data:
+            if row[4] is None:
+                agent = ip = "Offline"
+                countOffline += 1
+            else:
+                agent = row[4]
+                ip = row[5]
+                countOnline += 1
+            print("|", row[0].ljust(contextLen), "|", row[1].ljust(vars.lenName), "|", row[2].ljust(passwordLen), "|", row[3][:40].ljust(40), \
+                  "|", agent[:30].ljust(30), "|", ip[:15].ljust(15), "|")
+        print(boards)
+        print("Online : " + str(countOnline) + "\nOffline: " + str(countOffline))
 
 
 def mkConfig(vendorNum):
@@ -263,7 +325,7 @@ def mkConfig(vendorNum):
 
     checkOk = False
     while checkOk == False:
-        macAddress = input("Mac-address or \"\033[33mquit\033[0m\" to quit: ").lower().replace(":", "").replace(" ", "").replace("-", "")
+        macAddress = input("Mac-address or \"\033[33mquit\033[0m\" to quit: ").lower().replace(":", "").replace(" ", "")
         checkCancel(macAddress)
         if len(macAddress) != 12:
             print("\033[31mMac-address must have 12 characters only(without colons).\033[0m")
