@@ -58,3 +58,27 @@ def makePanasonicConfig(name, secret, macAddress):
         file.write('CFG_CYCLIC_INTVL="3600"\nVLAN_ENABLE="{0}"\nVLAN_ID_IP_PHONE="{1}"\n'.format(vars.vlanEnabled, vars.vlan))
 
     print("Created as %s" % fileName)
+
+
+def makeYealinkConfig(name, secret, macAddress):
+    fileName = macAddress + ".cfg"
+
+    with open(fileName, "w") as file:
+        file.write('#!version:1.0.0.1\n\n')
+
+    with open(fileName, "a") as file:
+        file.write('account.1.enable = 1\naccount.1.label = {0}\naccount.1.display_name = {0}\naccount.1.auth_name = {0}\n' .format(name))
+        file.write('account.1.password = {0}\naccount.1.user_name = {1}\n'.format(secret, name))
+        file.write('account.1.sip_server_host = {0}\naccount.X.sip_server.Y.transport_type = 0\n'.format(vars.pbxServer))
+        file.write('account.X.sip_server.1.expires = 3600\naccount.X.sip_server.1.retry_counts = 3\n\n')
+        file.write('network.ip_address_mode = 0\nnetwork.internet_port.type = 0\nnetwork.lldp.enable = 0\n')
+        file.write('network.vlan.dhcp_enable = {0}\nnetwork.vlan.dhcp_option = {1}\n'.format(vars.vlanEnabled, vars.vlan))
+        file.write('local_time.time_zone = +5\nlocal_time.summer_time = 0\nlocal_time.manual_ntp_srv_prior = 0\n')
+        file.write('local_time.ntp_server1 = {0}\nlocal_time.interval = 1000\n'.format(vars.ntpServer))
+        file.write('local_time.time_format = 1\nlocal_time.date_format = 1\n')
+        file.write('security.user_password = admin:{0}\nsecurity.user_password = user:{1}\n\n'.format(vars.phoneAdminPass, vars.phoneUserPass))
+        file.write('account.1.codec.1.payload_type = g722\naccount.1.codec.1.rtpmap = 9\naccount.1.codec.1.enable = 1\n\n')
+        file.write('account.1.codec.2.payload_type = PCMA\naccount.1.codec.2.rtpmap = 8\naccount.1.codec.2.enable = 1\n\n')
+        file.write('account.1.codec.3.payload_type = PCMU\naccount.1.codec.3.rtpmap = 0\naccount.1.codec.3.enable = 1\n')
+
+    print("Created as %s" % fileName)

@@ -341,8 +341,10 @@ def mkConfig(vendorNum):
     secret = db.getValue(name, "password")
     if vendorNum == "1":
         makeConfig.makeGrandstreamConfig(name, secret, macAddress)
-    else:
+    elif vendorNum == "2":
         makeConfig.makePanasonicConfig(name, secret, macAddress)
+    else:
+        makeConfig.makeYealinkConfig(name, secret, macAddress)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")

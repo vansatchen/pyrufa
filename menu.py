@@ -34,13 +34,14 @@ def showMenu():
 def makeConfigMenu():
     print("1) For Grandstream")
     print("2) For Panasonic")
+    print("3) For Yealink")
 
     choiceMenu = input("Please enter vendor[1]: ")
 
     if choiceMenu == "1" or choiceMenu == "":
         functions.mkConfig("1")
-    elif choiceMenu == "2":
-        functions.mkConfig("2")
+    elif choiceMenu == "2" or choiceMenu == "3":
+        functions.mkConfig(choiceMenu)
     else:
         functions.checkCancel(choiceMenu)
         print("\033[31mI don't understand your choice.\033[0m")
