@@ -68,6 +68,37 @@ def blacklistMenu():
             print("\033[36mNo action. Exiting\033[0m\n")
             sys.exit(0)
         else:
+            functions.checkCancel(choiceBL)
+            print("\033[31mI don't understand your choice.\033[0m")
+            choiceBL ='0'
+
+def provisioningMenu():
+    while True:
+        print("\n1) Make associate number + mac address")
+        print("2) Delete associate")
+        print("3) Edit associate")
+        print("4) Show associates order by number")
+        print("5) Show associates order by mac address")
+        print("0) back")
+
+        choicePM = input("Please enter an action[quit]: ")
+
+        if choicePM =="1":
+            makeConfigMenu()
+        elif choicePM =="2":
+            functions.delProvisioningAssociate()
+        elif choicePM =="3":
+            functions.editProvisioningAssociate()
+        elif choicePM =="4":
+            functions.showProvisioningAssociates("name")
+        elif choicePM =="5":
+            functions.showProvisioningAssociates("macAddress")
+        elif choicePM =="0":
+            return
+        elif choicePM =="":
+            print("\033[36mNo action. Exiting\033[0m\n")
+            sys.exit(0)
+        else:
             functions.checkCancel(choice)
             print("\033[31mI don't understand your choice.\033[0m")
             choice ='0'
@@ -78,7 +109,7 @@ def mainMenu(defaultContext):
         print("2) Delete")
         print("3) Edit")
         print("4) Show")
-        print("5) Make config")
+        print("5) Provisioning")
         print("6) Reboot telephone")
         print("7) Blacklist")
 
@@ -93,15 +124,15 @@ def mainMenu(defaultContext):
         elif choice =="4":
             showMenu()
         elif choice =="5":
-            makeConfigMenu()
+            provisioningMenu()
 
-            while True:
-                answer = input("\033[36mMake another one?[Y/n]: \033[0m")
-                functions.checkCancel(answer)
-                if answer == "" or answer.lower() == "y":
-                    makeConfigMenu()
-                else:
-                    break
+#            while True:
+#                answer = input("\033[36mMake another one?[Y/n]: \033[0m")
+#                functions.checkCancel(answer)
+#                if answer == "" or answer.lower() == "y":
+#                    makeConfigMenu()
+#                else:
+#                    break
 
         elif choice =="6":
             functions.rebootPhone()

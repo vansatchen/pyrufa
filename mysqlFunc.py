@@ -97,6 +97,33 @@ class Database:
         data = self.cursor.fetchall()
         return True if data else False
 
+    def showProvisioningAssociates(self, option):
+        self.cursor.execute("SELECT name, macAddress, vlan FROM configs ORDER BY %s" % option)
+        return self.cursor.fetchall()
+
+    def existInConfigs(self, option, data):
+        self.cursor.execute("SELECT " + option + " FROM configs WHERE " + option + " = %s", (data,))
+        data = self.cursor.fetchall()
+        return True if data else False
+
+    def makeProvisioningAssociates(self, name, mac, vlan):
+        self.cursor.execute("INSERT INTO configs(name, macAddress, vlan) VALUES(%s,%s,%s)", (name, mac, vlan))
+        self.db.commit()
+
+    def deleteProvisioningAssociate(self, name):
+        self.cursor.execute("DELETE FROM configs WHERE name = %s", (name,))
+        self.db.commit()
+        print("\033[36mDone.\033[0m")
+
+    def getConfig(self, value):
+        self.cursor.execute("SELECT name, macAddress, vlan FROM configs WHERE name = %s" % (value))
+        return self.cursor.fetchall()
+
+    def editProvisioningAssociate(self, name, oldMacAddress, newMacAddress, vlan):
+        self.cursor.execute("UPDATE configs SET macAddress = %s, vlan = %s WHERE name = %s AND macAddress = %s", (newMacAddress, vlan, name, oldMacAddress))
+        self.db.commit()
+        print("\033[36mDone.\033[0m")
+
     def __del__(self):
         self.cursor.close()
         self.db.close()

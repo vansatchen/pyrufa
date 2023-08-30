@@ -312,13 +312,23 @@ def mkConfig(vendorNum):
             continue
         elif len(name) != vars.lenName or not name.isdigit():
             checkCancel(name)
-            print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
+            print("\033[31mName/number must have %s digitals only, please enter another one\033[0m" % vars.lenName)
             continue
 
         db = mysqlFunc.Database()
         checkName = db.checkNameNotExists(name)
         if checkName:
-            print("\033[31mName/number %s not exists, please enter another\033[0m" % name)
+            print("\033[31mName/number %s not exists, please enter another one\033[0m" % name)
+            continue
+        else:
+            checkOk = True
+
+        if db.existInConfigs("name", name):
+            answer = input("\033[31mNumber exists as associasion. Continue?[y/N]: \033[0m")
+            if answer == "" or answer.lower() == "n":
+                checkOk = False
+            else:
+                checkOk = True
         else:
             checkOk = True
     checkCancel(name)
@@ -330,7 +340,7 @@ def mkConfig(vendorNum):
         if len(macAddress) != 12:
             print("\033[31mMac-address must have 12 characters only(without colons).\033[0m")
         elif os.path.isfile(vars.cfgLocation + "cfg" + macAddress + ".xml"):
-            answer = input("\033[36mConfig file exists. Continue?[y/N]: \033[0m")
+            answer = input("\033[36mConfig file in directory exists. Continue?[y/N]: \033[0m")
             if answer == "" or answer.lower() == "n":
                 checkOk = False
             else:
@@ -338,13 +348,31 @@ def mkConfig(vendorNum):
         else:
             checkOk = True
 
+        if db.existInConfigs("macAddress", macAddress):
+            answer = input("\033[31mMac address exists as associasion. Continue?[y/N]: \033[0m")
+            if answer == "" or answer.lower() == "n":
+                checkOk = False
+            else:
+                checkOk = True
+        else:
+            checkOk = True
+    checkCancel(macAddress)
+
+    answer = input("\033[36mUse vlan 132?[Y/n]: \033[0m")
+    checkCancel(answer)
+    if answer == "" or answer.lower() == "y":
+        vlanUsed = vars.vlan
+    else:
+        vlanUsed = 0
+
     secret = db.getValue(name, "password")
     if vendorNum == "1":
-        makeConfig.makeGrandstreamConfig(name, secret, macAddress)
+        makeConfig.makeGrandstreamConfig(name, secret, macAddress, vlanUsed)
+        db.makeProvisioningAssociates(name, macAddress, vlanUsed)
     elif vendorNum == "2":
-        makeConfig.makePanasonicConfig(name, secret, macAddress)
+        makeConfig.makePanasonicConfig(name, secret, macAddress, vlanUsed)
     else:
-        makeConfig.makeYealinkConfig(name, secret, macAddress)
+        makeConfig.makeYealinkConfig(name, secret, macAddress, vlanUsed)
 
 def rebootPhone():
     h = httplib2.Http("/tmp/cache")
@@ -437,3 +465,137 @@ def showBlacklist():
 
         print(boards)
     else: print("Empty")
+
+def showProvisioningAssociates(option):
+    db = mysqlFunc.Database()
+    data = db.showProvisioningAssociates(option)
+
+    numberLen = 0
+    vlanLen = 0
+    count = 0
+
+    if data:
+        for row in data:
+            if len(row[0]) > numberLen: numberLen = len(row[0])
+            if len(row[2]) > vlanLen: vlanLen = len(row[2])
+        if numberLen < 6: numberLen = 6
+        if vlanLen < 4: vlanLen = 4
+
+        boards = "+" + "="*(numberLen+2) + "+" + "="*14 + "+" + "="*(vlanLen+2) + "+"
+        print("\n" + boards)
+        print("|" + " number " + " "*(numberLen-6) + "|" + " mac address  " + "|" + " vlan " + "|")
+        print(boards)
+
+        for row in data:
+            print("| " + row[0] + " "*(numberLen-len(row[0])) + " | " + row[1] + " | " + row[2] + " "*(vlanLen-len(row[2])) + " |")
+            count += 1
+
+        print(boards)
+        print("Total: " + str(count))
+    else: print("Empty")
+
+def delProvisioningAssociate():
+    db = mysqlFunc.Database()
+    checkOk = False
+    while checkOk == False:
+        name = input("Name/number: ")
+        if name == "":
+            continue
+        elif len(name) != vars.lenName or not name.isdigit():
+            checkCancel(name)
+            print("\033[31mName/number must have %s digitals only, please enter another one\033[0m" % vars.lenName)
+            continue
+
+        checkName = db.existInConfigs("name", name)
+        if not checkName:
+            print("\033[31mName/number %s not exists, please enter another one\033[0m" % name)
+        else:
+            checkOk = True
+
+    db.deleteProvisioningAssociate(name)
+
+def editProvisioningAssociate():
+    db = mysqlFunc.Database()
+    updateConfig = False
+    checkOk = False
+    while checkOk == False:
+        name = input("Name/number to edit: ")
+        if name == "":
+            continue
+        elif len(name) != vars.lenName or not name.isdigit():
+            checkCancel(name)
+            print("\033[31mName/number must have %s digitals only, please enter another\033[0m" % vars.lenName)
+            continue
+
+        checkName = db.existInConfigs("name", name)
+        if not checkName:
+            print("\033[31mName/number %s not exists, please enter another\033[0m" % name)
+            continue
+        else:
+            checkOk = True
+
+    oldMacAddresses = db.getConfig(name)
+    checkOk = False
+    while checkOk == False:
+        if len(oldMacAddresses) < 2:
+            newMacAddress = input("New mac address[\033[33m%s\033[0m] or \"\033[33mquit\033[0m\" to quit: " % oldMacAddresses[0][1]).lower().replace(":", "").replace(" ", "")
+            if newMacAddress == '':
+                newMacAddress = oldMacAddresses[0][1]
+                oldMacAddress = newMacAddress
+                break
+            else:
+                checkCancel(newMacAddress)
+                if len(newMacAddress) != 12:
+                    print("\033[31mMac-address must have 12 characters only(without colons).\033[0m")
+                    continue
+                else:
+                     oldMacAddress = oldMacAddresses[0][1]
+                     checkOk = True
+                     updateConfig = True
+        else:
+            for i in range(0, len(oldMacAddresses)):
+                print(str(i+1) + ") " + str(oldMacAddresses[i][1]))
+            try:
+                macAddress = int(input("Editing mac address: "))
+                assert 0 < macAddress < len(oldMacAddresses)+1
+            except:
+                print("\033[33mIgnoring invalid value. Editing mac address is: \033[0m" + oldMacAddresses[0][1])
+                macAddress = 1
+                oldMacAddress = oldMacAddresses[0][1]
+
+            newMacAddress = input("New mac address[\033[33m%s\033[0m] or \"\033[33mquit\033[0m\" to quit: " % oldMacAddresses[int(macAddress)-1][1]).lower().replace(":","").replace(" ", "")
+            if newMacAddress == '':
+                newMacAddress = oldMacAddresses[int(macAddress)-1][1]
+                oldMacAddress = newMacAddress
+                break
+            else:
+                checkCancel(newMacAddress)
+                if len(newMacAddress) != 12:
+                    print("\033[31mMac-address must have 12 characters only(without colons).\033[0m")
+                    continue
+                else:
+                    oldMacAddress = oldMacAddresses[int(macAddress)-1][1]
+                    checkOk = True
+                    updateConfig = True
+
+    for assoc in oldMacAddresses:
+        if oldMacAddress == assoc[1]:
+            oldVlan = assoc[2]
+    variants = "Y/n"
+    if oldVlan == '0': variants = "N/y"
+    answer = input("\033[36mUse vlan 132?[%s]: \033[0m" % variants)
+    checkCancel(answer)
+    if answer == "" or answer.lower() == variants.split('/')[0].lower():
+        vlanUsed = oldVlan
+    else:
+        if answer != variants.split('/')[1].lower():
+            print("\033[33mIgnoring invalid value. Using default variant.\033[0m")
+            vlanUsed = oldVlan
+        elif answer.lower() == "y": vlanUsed = vars.vlan
+        elif answer.lower() == "n": vlanUsed = "0"
+        updateConfig = True
+
+    if updateConfig:
+        db.editProvisioningAssociate(name, oldMacAddress, newMacAddress, vlanUsed)
+    else:
+        print("\033[33mNo changes. Exiting.\033[0m")
