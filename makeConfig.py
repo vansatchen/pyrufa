@@ -32,7 +32,6 @@ def makeGrandstreamConfig(name, secret, macAddress, vlan):
         file.write('    <P57>9</P57>\n    <P58>8</P58>\n    <P59>0</P59>\n    <P60>18</P60>\n\n')
         file.write('<!-- Disable custom grandstream headers-->\n')
         file.write('    <P26054>0</P26054>\n    <P26058>0</P26058>\n    <P26059>0</P26059\n')
-        file.write('    <P57>9</P57>\n    <P58>8</P58>\n    <P59>0</P59>\n    <P60>18</P60>\n')
         file.write('  </config>\n</gs_provision>')
 
     print("Created as %s" % fileName)
